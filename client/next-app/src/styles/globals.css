@@ -4,24 +4,71 @@
 @tailwind utilities;
 
 :root {
-  --color-bg-primary: #0A0B0D;
-  --color-bg-secondary: #141619;
-  --color-fg-primary: #FFFFFF;
-  --color-brand-primary: #FF6B35;
-  --color-brand-secondary: #E85D3C;
+  /* Theme variables set by ThemeProvider */
+  --primary: #FF6B35;
+  --secondary: #FF8C42;
+  --accent: #FFB366;
+  --background: #0A0A0A;
+  --surface: #1A1A1A;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-muted: #999999;
+  --glow-primary: 0 0 40px rgba(255, 107, 53, 0.5);
+  --glow-secondary: 0 0 20px rgba(255, 107, 53, 0.3);
+
+  /* Font stacks */
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-[data-theme="light"] {
-  --color-bg-primary: #FAF9F6;
-  --color-bg-secondary: #FFFFFF;
-  --color-fg-primary: #111827;
-  --color-brand-primary: #E85D3C;
-  --color-brand-secondary: #FF6B35;
+html {
+  background-color: var(--background);
+  color: var(--text-primary);
 }
 
 body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-fg-primary);
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glass morphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Glow effects */
+.glow-primary {
+  box-shadow: var(--glow-primary);
+}
+
+.glow-secondary {
+  box-shadow: var(--glow-secondary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
 }

@@ -44,46 +44,60 @@ open http://localhost:3000/dashboard
 
 The `dev.sh` script manages everything:
 
-Start by coming up with a basic outline of the plan with detailed summaries and psedo code or commands for things like generated the web client, researching the grpc website and available github repositories. Searching for up to date September 2025 information and reading over the appropriate documentation, etc.
+```bash
+./dev.sh help      # Show all commands
+./dev.sh setup     # Initial setup
+./dev.sh start     # Start all services
+./dev.sh stop      # Stop services
+./dev.sh status    # Check status
+./dev.sh logs      # View logs
+./dev.sh restart   # Restart services
+```
 
-Build out agents and if necessary a mmulti-level git working tree format to manage multiple projects.
+## 📐 Architecture
 
-Build out and plan a set of tasks to plan out a detailed plan and checklist and all related documentation and related notes from all the research you've done.
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Next.js App   │────▶│   Envoy Proxy   │────▶│   gRPC Server   │
+│   (Port 3000)   │     │   (Port 8080)   │     │   (Port 50051)  │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
 
-Use standards compliant approaches and setup the entire environment(s) required for the respective projects.
+## 📚 Documentation
 
-https://grpc.io/docs/languages/node/quickstart/
+- [Master Implementation Plan](MASTER_IMPLEMENTATION_PLAN.md)
+- [Next 10 Steps](NEXT_10_STEPS.md)
+- [Architecture Patterns](ARCHITECTURE_PATTERNS.md)
+- [Design System](docs/DESIGN_SYSTEM.md)
+- [Theme System](docs/THEMING_SYSTEM.md)
+- [Demo Details](docs/demos/)
 
-https://grpc.io/docs/platforms/web/
+## 🧪 Testing
 
+```bash
+./dev.sh test      # Run all tests
+```
 
-https://grpc.io/docs/guides/
-These pages under guides could be good resources for the app too.
+## 🐛 Troubleshooting
 
-Authentication
-Benchmarking
-Cancellation
-Compression
-Custom Backend Metrics
-Custom Load Balancing Policies
-Custom Name Resolution
-Deadlines
-Debugging
-Error handling
-Flow Control
-Graceful Shutdown
-Health Checking
-Interceptors
-Keepalive
-Metadata
-OpenTelemetry Metrics
-Performance Best Practices
-Reflection
-Request Hedging
-Retry
-Service Config
-Status Codes
-Wait-for-Ready
+```bash
+./dev.sh fix       # Apply common fixes
+./dev.sh clean     # Clean and rebuild
+./dev.sh logs      # Check service logs
+```
 
-Read all of grpc documentation necessary.
+## 📊 Performance Targets
+
+- Initial Load: < 2s
+- Stream Latency: < 50ms
+- Memory Usage: < 100MB
+- Lighthouse Score: > 95
+
+## 🤝 Contributing
+
+See [DEVELOPMENT_CHECKLIST.md](DEVELOPMENT_CHECKLIST.md) for development guidelines.
+
+## 📄 License
+
+MIT
 
