@@ -54,12 +54,21 @@ graph TB
 
 ## 🎨 Live Demo Features
 
+### Main Dashboards
 | Feature | Screenshot | Status |
 |---------|------------|--------|
 | **IoT Dashboard**<br/>Real-time telemetry streaming | ![IoT Dashboard](screenshots/iot-dashboard.png) | ✅ Live Data |
 | **Trading Dashboard**<br/>Market data & charts | ![Trading Dashboard](screenshots/trading-dashboard.png) | ✅ Real-time |
+| **Charts & Data**<br/>Interactive visualizations | ![Charts](screenshots/charts-data.png) | ✅ Dynamic |
+| **Dashboard Final**<br/>Complete view | ![Dashboard](screenshots/dashboard-final.png) | ✅ Complete |
+
+### UI Features
+| Feature | Screenshot | Status |
+|---------|------------|--------|
 | **Theme Switching**<br/>6 colors × 2 modes = 12 themes | ![Theme Selector](screenshots/theme-selector.png) | ✅ Dynamic |
-| **Mobile Responsive**<br/>Adaptive UI across devices | ![Mobile View](screenshots/mobile-responsive.png) | ✅ Responsive |
+| **Mobile Responsive**<br/>Adaptive mobile UI | ![Mobile View](screenshots/mobile-responsive.png) | ✅ Responsive |
+| **Tablet View**<br/>Optimized for tablets | ![Tablet View](screenshots/tablet-responsive.png) | ✅ Adaptive |
+| **Collapsed Sidebar**<br/>Space-saving navigation | ![Collapsed](screenshots/collapsed-sidebar.png) | ✅ Collapsible |
 
 ## 🔧 Technology Stack
 
