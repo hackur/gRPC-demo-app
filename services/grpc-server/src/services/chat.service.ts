@@ -1,4 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
+import { ChatServiceInterface, BaseServiceHandler } from '../types/grpc-handlers';
 
 // Chat room manager
 class ChatManager {
@@ -43,11 +44,15 @@ class ChatManager {
   }
 }
 
-export class ChatServiceHandlers {
+export class ChatServiceHandlers extends BaseServiceHandler implements ChatServiceInterface {
   private chatManager: ChatManager;
   private activeStreams: Set<grpc.ServerDuplexStream<any, any>> = new Set();
 
+  // Index signature for gRPC compatibility
+  [key: string]: any;
+
   constructor() {
+    super();
     this.chatManager = new ChatManager();
   }
 

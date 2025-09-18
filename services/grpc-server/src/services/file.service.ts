@@ -1,5 +1,6 @@
 import * as grpc from '@grpc/grpc-js';
 import crypto from 'crypto';
+import { FileServiceInterface, BaseServiceHandler } from '../types/grpc-handlers';
 
 // File storage simulator
 class FileStorage {
@@ -73,11 +74,15 @@ class FileStorage {
   }
 }
 
-export class FileServiceHandlers {
+export class FileServiceHandlers extends BaseServiceHandler implements FileServiceInterface {
   private storage: FileStorage;
   private uploadSessions: Map<string, any> = new Map();
 
+  // Index signature for gRPC compatibility
+  [key: string]: any;
+
   constructor() {
+    super();
     this.storage = new FileStorage();
   }
 

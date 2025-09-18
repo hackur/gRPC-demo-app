@@ -1,4 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
+import { AnalyticsServiceInterface, BaseServiceHandler } from '../types/grpc-handlers';
 
 // Analytics data generator
 class AnalyticsEngine {
@@ -128,12 +129,16 @@ class AnalyticsEngine {
   }
 }
 
-export class AnalyticsServiceHandlers {
+export class AnalyticsServiceHandlers extends BaseServiceHandler implements AnalyticsServiceInterface {
   private engine: AnalyticsEngine;
   private requestCache: Map<string, { data: any; timestamp: number }> = new Map();
   private cacheTimeout = 60000; // 1 minute cache
 
+  // Index signature for gRPC compatibility
+  [key: string]: any;
+
   constructor() {
+    super();
     this.engine = new AnalyticsEngine();
   }
 

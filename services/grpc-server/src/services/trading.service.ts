@@ -1,4 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
+import { TradingServiceInterface, BaseServiceHandler } from '../types/grpc-handlers';
 
 // Trading data simulator
 class TradingSimulator {
@@ -96,10 +97,14 @@ class TradingSimulator {
   }
 }
 
-export class TradingServiceHandlers {
+export class TradingServiceHandlers extends BaseServiceHandler implements TradingServiceInterface {
   private simulator: TradingSimulator;
 
+  // Index signature for gRPC compatibility
+  [key: string]: any;
+
   constructor() {
+    super();
     this.simulator = new TradingSimulator();
   }
 

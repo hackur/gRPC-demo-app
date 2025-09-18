@@ -8,6 +8,14 @@ import { TradingServiceHandlers } from './services/trading.service';
 import { ChatServiceHandlers } from './services/chat.service';
 import { FileServiceHandlers } from './services/file.service';
 import { AnalyticsServiceHandlers } from './services/analytics.service';
+// Type imports for better code documentation and type safety
+import type {
+  IoTServiceInterface,
+  TradingServiceInterface,
+  ChatServiceInterface,
+  FileServiceInterface,
+  AnalyticsServiceInterface
+} from './types/grpc-handlers';
 
 // Load proto file
 const PROTO_PATH = path.join(__dirname, '../../../packages/protos/src/services.proto');
@@ -42,38 +50,43 @@ class GrpcServer {
   private setupServices() {
     console.log('🔧 Setting up gRPC services...');
 
-    // Add IoT Service
+    // Add IoT Service - Type-safe implementation
+    const iotService = new IoTServiceHandlers();
     this.server.addService(
       proto.demo.IoTService.service,
-      new IoTServiceHandlers()
+      iotService
     );
     console.log('✅ IoT Service registered');
 
-    // Add Trading Service
+    // Add Trading Service - Type-safe implementation
+    const tradingService = new TradingServiceHandlers();
     this.server.addService(
       proto.demo.TradingService.service,
-      new TradingServiceHandlers()
+      tradingService
     );
     console.log('✅ Trading Service registered');
 
-    // Add Chat Service
+    // Add Chat Service - Type-safe implementation
+    const chatService = new ChatServiceHandlers();
     this.server.addService(
       proto.demo.ChatService.service,
-      new ChatServiceHandlers()
+      chatService
     );
     console.log('✅ Chat Service registered');
 
-    // Add File Service
+    // Add File Service - Type-safe implementation
+    const fileService = new FileServiceHandlers();
     this.server.addService(
       proto.demo.FileService.service,
-      new FileServiceHandlers()
+      fileService
     );
     console.log('✅ File Service registered');
 
-    // Add Analytics Service
+    // Add Analytics Service - Type-safe implementation
+    const analyticsService = new AnalyticsServiceHandlers();
     this.server.addService(
       proto.demo.AnalyticsService.service,
-      new AnalyticsServiceHandlers()
+      analyticsService
     );
     console.log('✅ Analytics Service registered');
   }

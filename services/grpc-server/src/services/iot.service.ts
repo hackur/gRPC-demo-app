@@ -1,4 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
+import { IoTServiceInterface, BaseServiceHandler } from '../types/grpc-handlers';
 
 // Mock data generator for IoT devices
 class DeviceSimulator {
@@ -76,10 +77,14 @@ class DeviceSimulator {
   }
 }
 
-export class IoTServiceHandlers {
+export class IoTServiceHandlers extends BaseServiceHandler implements IoTServiceInterface {
   private simulator: DeviceSimulator;
 
+  // Index signature for gRPC compatibility
+  [key: string]: any;
+
   constructor() {
+    super();
     this.simulator = new DeviceSimulator();
   }
 

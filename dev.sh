@@ -253,34 +253,40 @@ cmd_start() {
         print_error "Failed to start gRPC server. Check logs: tail -f $PIDS_DIR/grpc-server.log"
     fi
 
-    # Start Envoy Proxy (if Docker is available)
+    # Start Envoy Proxy (if Docker is available and running)
     if command -v docker &> /dev/null; then
-        print_step "Starting Envoy proxy on port $ENVOY_PORT..."
+        # Check if Docker daemon is running
+        if docker info >/dev/null 2>&1; then
+            print_step "Starting Envoy proxy on port $ENVOY_PORT..."
 
-        # Stop existing Envoy container
-        docker stop envoy-grpc-demo 2>/dev/null || true
-        docker rm envoy-grpc-demo 2>/dev/null || true
+            # Stop existing Envoy container
+            docker stop envoy-grpc-demo 2>/dev/null || true
+            docker rm envoy-grpc-demo 2>/dev/null || true
 
-        # Start new Envoy container
-        docker run -d \
-            --name envoy-grpc-demo \
-            -v "$PROJECT_ROOT/docker/envoy.yaml":/etc/envoy/envoy.yaml:ro \
-            -p $ENVOY_PORT:8080 \
-            -p $ENVOY_ADMIN_PORT:9901 \
-            --network host \
-            envoyproxy/envoy:v1.27-latest \
-            -c /etc/envoy/envoy.yaml \
-            > "$PIDS_DIR/envoy.log" 2>&1
+            # Start new Envoy container
+            docker run -d \
+                --name envoy-grpc-demo \
+                -v "$PROJECT_ROOT/docker/envoy.yaml":/etc/envoy/envoy.yaml:ro \
+                -p $ENVOY_PORT:8080 \
+                -p $ENVOY_ADMIN_PORT:9901 \
+                --add-host host.docker.internal:host-gateway \
+                envoyproxy/envoy:v1.27-latest \
+                -c /etc/envoy/envoy.yaml \
+                > "$PIDS_DIR/envoy.log" 2>&1
 
-        sleep 3
+            sleep 3
 
-        if docker ps | grep -q envoy-grpc-demo; then
-            print_success "Envoy proxy started"
+            if docker ps | grep -q envoy-grpc-demo; then
+                print_success "Envoy proxy started"
+            else
+                print_error "Failed to start Envoy. Check: docker logs envoy-grpc-demo"
+                print_warning "Running without Envoy proxy - gRPC-Web features may be limited"
+            fi
         else
-            print_error "Failed to start Envoy. Check: docker logs envoy-grpc-demo"
+            print_warning "Docker daemon not running. Skipping Envoy proxy (gRPC-Web features will be limited)"
         fi
     else
-        print_warning "Docker not found. Envoy proxy required for gRPC-Web"
+        print_warning "Docker not installed. Skipping Envoy proxy (gRPC-Web features will be limited)"
     fi
 
     # Start Next.js Application
@@ -389,11 +395,11 @@ cmd_status() {
     fi
 
     # Check Envoy
-    if command -v docker &> /dev/null && docker ps | grep -q envoy-grpc-demo; then
+    if command -v docker &> /dev/null && docker info >/dev/null 2>&1 && docker ps | grep -q envoy-grpc-demo; then
         [ "$quiet" == false ] && print_success "Envoy Proxy:    ${GREEN}RUNNING${NC} on port $ENVOY_PORT"
     else
-        [ "$quiet" == false ] && print_error "Envoy Proxy:    ${RED}STOPPED${NC}"
-        all_running=false
+        [ "$quiet" == false ] && print_warning "Envoy Proxy:    ${YELLOW}OPTIONAL${NC} (Docker not available)"
+        # Don't mark as failed since Envoy is optional for local development
     fi
 
     # Check Next.js
