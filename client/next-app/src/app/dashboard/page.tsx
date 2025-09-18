@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Main dashboard page component for the gRPC demo application.
+ * Provides a comprehensive interface for demonstrating various gRPC patterns
+ * including IoT monitoring, trading data, chat, file operations, and analytics.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -12,7 +21,10 @@ import { IoTDashboard } from '@/components/demos/IoTDashboard';
 import { TradingDashboard } from '@/components/demos/TradingDashboard';
 import { useConnectionStatus } from '@/store/appStore';
 
-// Demo configurations
+/**
+ * Configuration object for available demo sections.
+ * Each demo showcases different gRPC patterns and use cases.
+ */
 const demoConfigs = {
   iot: {
     name: 'IoT Device Manager',
@@ -46,12 +58,33 @@ const demoConfigs = {
   },
 };
 
+/**
+ * Main dashboard page component that orchestrates the layout and demo switching.
+ * Provides a responsive interface with sidebar navigation and dynamic content areas.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered dashboard page
+ *
+ * @example
+ * ```typescript
+ * // This component is typically used as a page route
+ * // /app/dashboard/page.tsx
+ * export default function DashboardPage() {
+ *   return <DashboardPageComponent />;
+ * }
+ * ```
+ */
 export default function DashboardPage() {
+  /** Currently active demo section */
   const [activeDemo, setActiveDemo] = useState<keyof typeof demoConfigs>('iot');
+  /** Whether the sidebar is collapsed */
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  /** Current gRPC connection status */
   const connectionStatus = useConnectionStatus();
+  /** Whether streaming data is active */
   const isStreaming = connectionStatus === 'connected';
 
+  /** Configuration for the currently selected demo */
   const currentDemo = demoConfigs[activeDemo];
 
   return (
@@ -106,7 +139,13 @@ export default function DashboardPage() {
   );
 }
 
-// IoT Demo Widgets
+/**
+ * IoT demo widgets component showcasing device monitoring interface.
+ * Displays device status, telemetry streams, device lists, and control panels.
+ *
+ * @component
+ * @returns {JSX.Element} The IoT demo widget grid
+ */
 function IoTDemoWidgets() {
   return (
     <WidgetGrid columns={4} gap="md">
@@ -202,7 +241,13 @@ function IoTDemoWidgets() {
   );
 }
 
-// Trading Demo Widgets
+/**
+ * Trading demo widgets component for financial market data.
+ * Shows portfolio values, market data charts, and order book information.
+ *
+ * @component
+ * @returns {JSX.Element} The trading demo widget grid
+ */
 function TradingDemoWidgets() {
   return (
     <WidgetGrid columns={4} gap="md">
@@ -251,7 +296,13 @@ function TradingDemoWidgets() {
   );
 }
 
-// Chat Demo Widgets
+/**
+ * Chat demo widgets component for real-time messaging interface.
+ * Displays chat rooms, message streams, and online user lists.
+ *
+ * @component
+ * @returns {JSX.Element} The chat demo widget grid
+ */
 function ChatDemoWidgets() {
   return (
     <WidgetGrid columns={3} gap="md">
@@ -295,7 +346,13 @@ function ChatDemoWidgets() {
   );
 }
 
-// Files Demo Widgets
+/**
+ * Files demo widgets component for file management interface.
+ * Shows upload progress, file listings, and download capabilities.
+ *
+ * @component
+ * @returns {JSX.Element} The files demo widget grid
+ */
 function FilesDemoWidgets() {
   return (
     <WidgetGrid columns={3} gap="md">
@@ -334,7 +391,13 @@ function FilesDemoWidgets() {
   );
 }
 
-// Analytics Demo Widgets
+/**
+ * Analytics demo widgets component for business intelligence interface.
+ * Displays revenue metrics, user analytics, performance charts, and system health.
+ *
+ * @component
+ * @returns {JSX.Element} The analytics demo widget grid
+ */
 function AnalyticsDemoWidgets() {
   return (
     <WidgetGrid columns={4} gap="md">

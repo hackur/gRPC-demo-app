@@ -1,16 +1,63 @@
+/**
+ * @fileoverview Sidebar navigation component for the dashboard layout.
+ * Provides collapsible navigation between different demo sections with
+ * smooth animations and visual indicators for active states.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
+/**
+ * Props interface for the Sidebar component.
+ *
+ * @interface SidebarProps
+ */
 interface SidebarProps {
+  /** Currently active demo identifier */
   activeDemo: string;
+  /** Callback function when demo selection changes */
   onDemoChange: (demo: string) => void;
+  /** Whether the sidebar is collapsed */
   collapsed: boolean;
+  /** Callback function when collapse state changes */
   onCollapsedChange: (collapsed: boolean) => void;
+  /** Object containing demo configurations with icons and descriptions */
   demos: Record<string, { name: string; icon: string; color: string; description: string }>;
 }
 
+/**
+ * Sidebar navigation component with collapsible design.
+ * Displays demo options with icons, descriptions, and active state indicators.
+ *
+ * @component
+ * @param {SidebarProps} props - The component props
+ * @returns {JSX.Element} The rendered Sidebar component
+ *
+ * @example
+ * ```typescript
+ * const demos = {
+ *   iot: {
+ *     name: 'IoT Monitoring',
+ *     icon: '📡',
+ *     color: 'green',
+ *     description: 'Device telemetry'
+ *   }
+ * };
+ *
+ * <Sidebar
+ *   activeDemo="iot"
+ *   onDemoChange={(demo) => setActiveDemo(demo)}
+ *   collapsed={false}
+ *   onCollapsedChange={setCollapsed}
+ *   demos={demos}
+ * />
+ * ```
+ */
 export function Sidebar({
   activeDemo,
   onDemoChange,

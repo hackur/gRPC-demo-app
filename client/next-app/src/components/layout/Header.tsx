@@ -1,10 +1,33 @@
+/**
+ * @fileoverview Header component for the application layout.
+ * Displays the app logo, current gRPC pattern, connection status,
+ * theme selector, and settings button with smooth animations.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
 import { ThemeSelector } from '@/components/ui/ThemeSelector';
 import { useConnectionStatus } from '@/store/appStore';
 
+/**
+ * Header component that provides the main navigation and status bar.
+ * Features animated entrance, connection status indicator, and theme controls.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Header component
+ *
+ * @example
+ * ```typescript
+ * // Basic usage in a layout
+ * <Header />
+ * ```
+ */
 export function Header() {
+  /** Current gRPC connection status from global store */
   const connectionStatus = useConnectionStatus();
 
   return (
