@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Trading Dashboard component for real-time market data monitoring.
+ * Provides comprehensive visualization of stock prices, trading volumes, bid/ask spreads,
+ * and market trends with interactive charts and data tables.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,24 +16,42 @@ import { WidgetCard } from '@/components/ui/WidgetCard';
 import { useGrpcConnection } from '@/hooks/useGrpcConnection';
 import useAppStore, { useTradingData } from '@/store/appStore';
 
+/**
+ * Trading Dashboard component for real-time market data visualization.
+ * Displays stock prices, charts, trading volumes, and market overview.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered trading dashboard
+ *
+ * @example
+ * ```typescript
+ * // Basic usage in a trading application
+ * <TradingDashboard />
+ * ```
+ */
 export function TradingDashboard() {
   const { services } = useGrpcConnection();
   const { marketData, watchlist, updateMarketData, setWatchlist } = useAppStore();
   const tradingData = useTradingData();
+  /** Historical price and volume data for chart visualization */
   const [priceHistory, setPriceHistory] = useState<any[]>([]);
+  /** Currently selected stock symbol for detailed view */
   const [selectedSymbol, setSelectedSymbol] = useState('AAPL');
 
   useEffect(() => {
     if (!services?.trading) return;
 
+    // Set up watchlist with major tech stocks
     const symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'];
     setWatchlist(symbols);
 
+    // Subscribe to real-time market data stream
     const unsubscribe = services.trading.streamMarketData(
       { symbols },
       (data) => {
         updateMarketData(data);
-        
+
+        // Update price history for the selected symbol only
         if (data.symbol === selectedSymbol) {
           setPriceHistory(prev => [...prev.slice(-30), {
             time: new Date(data.timestamp).toLocaleTimeString(),
@@ -35,12 +62,15 @@ export function TradingDashboard() {
       }
     );
 
+    // Cleanup subscription on unmount
     return () => {
       unsubscribe();
     };
   }, [services, selectedSymbol, updateMarketData, setWatchlist]);
 
+  /** Current market data for the selected symbol */
   const currentData = marketData.get(selectedSymbol);
+  /** Array of all market data for table display */
   const marketDataArray = Array.from(marketData.values());
 
   return (

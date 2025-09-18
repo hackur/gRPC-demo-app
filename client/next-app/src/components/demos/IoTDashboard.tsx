@@ -1,3 +1,12 @@
+/**
+ * @fileoverview IoT Dashboard component for monitoring device telemetry and alerts.
+ * Provides real-time visualization of IoT device metrics including temperature,
+ * humidity, pressure, and system alerts with interactive charts and data streams.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,48 +16,75 @@ import { WidgetCard } from '@/components/ui/WidgetCard';
 import { useGrpcConnection } from '@/hooks/useGrpcConnection';
 import useAppStore, { useIoTData } from '@/store/appStore';
 
+/**
+ * Data structure for chart visualization.
+ *
+ * @interface ChartData
+ */
 interface ChartData {
+  /** Formatted time string for the x-axis */
   time: string;
+  /** Numeric value for the y-axis */
   value: number;
 }
 
+/**
+ * IoT Dashboard component for real-time device monitoring.
+ * Displays telemetry data, alerts, and historical trends for IoT devices.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered IoT dashboard
+ *
+ * @example
+ * ```typescript
+ * // Basic usage in a dashboard page
+ * <IoTDashboard />
+ * ```
+ */
 export function IoTDashboard() {
   const { services } = useGrpcConnection();
   const { telemetryData, alerts, addTelemetryData, addAlert, setSelectedDevices } = useAppStore();
   const iotData = useIoTData();
+  /** Historical temperature data for chart visualization */
   const [temperatureHistory, setTemperatureHistory] = useState<ChartData[]>([]);
+  /** Historical humidity data for chart visualization */
   const [humidityHistory, setHumidityHistory] = useState<ChartData[]>([]);
+  /** Currently selected device for detailed view */
   const [selectedDevice, setSelectedDevice] = useState('device-1');
 
   useEffect(() => {
     if (!services?.iot) return;
 
-    // Subscribe to device telemetry
+    // Subscribe to device telemetry streams
     const devices = ['device-1', 'device-2', 'device-3'];
     setSelectedDevices(devices);
 
+    // Set up real-time telemetry data streaming
     const unsubscribeTelemetry = services.iot.streamDeviceTelemetry(
       { deviceIds: devices },
       (data) => {
         addTelemetryData(data);
-        
-        // Update history for charts
+
+        // Update chart history for the selected device only
         if (data.deviceId === selectedDevice) {
           const time = new Date(data.timestamp).toLocaleTimeString();
-          
-          setTemperatureHistory(prev => [...prev.slice(-20), { 
-            time, 
-            value: data.metrics.temperature 
+
+          // Maintain rolling window of last 20 data points for temperature
+          setTemperatureHistory(prev => [...prev.slice(-20), {
+            time,
+            value: data.metrics.temperature
           }]);
-          
-          setHumidityHistory(prev => [...prev.slice(-20), { 
-            time, 
-            value: data.metrics.humidity 
+
+          // Maintain rolling window of last 20 data points for humidity
+          setHumidityHistory(prev => [...prev.slice(-20), {
+            time,
+            value: data.metrics.humidity
           }]);
         }
       }
     );
 
+    // Set up real-time alert streaming
     const unsubscribeAlerts = services.iot.streamAlerts(
       {},
       (alert) => {
@@ -56,17 +92,19 @@ export function IoTDashboard() {
       }
     );
 
+    // Cleanup subscriptions on unmount
     return () => {
       unsubscribeTelemetry();
       unsubscribeAlerts();
     };
   }, [services, selectedDevice, addTelemetryData, addAlert, setSelectedDevices]);
 
+  /** Current telemetry data for the selected device */
   const currentData = telemetryData.get(selectedDevice);
 
   return (
     <div className="space-y-6">
-      {/* Device Selector */}
+      {/* Device Selection Interface */}
       <div className="flex gap-2">
         {['device-1', 'device-2', 'device-3'].map(deviceId => (
           <button
