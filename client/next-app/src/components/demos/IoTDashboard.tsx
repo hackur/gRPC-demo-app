@@ -128,7 +128,7 @@ export function IoTDashboard() {
           subtitle="Current reading"
           icon={<Thermometer />}
           size="small"
-          glowColor="var(--primary)"
+          glowColor="orange"
         >
           <div className="text-3xl font-bold">
             {currentData?.metrics.temperature?.toFixed(1) || '--'}°C
@@ -143,7 +143,7 @@ export function IoTDashboard() {
           subtitle="Current reading"
           icon={<Droplets />}
           size="small"
-          glowColor="var(--secondary)"
+          glowColor="blue"
         >
           <div className="text-3xl font-bold">
             {currentData?.metrics.humidity?.toFixed(1) || '--'}%
@@ -158,7 +158,7 @@ export function IoTDashboard() {
           subtitle="Current reading"
           icon={<Wind />}
           size="small"
-          glowColor="var(--accent)"
+          glowColor="green"
         >
           <div className="text-3xl font-bold">
             {currentData?.metrics.pressure?.toFixed(0) || '--'} hPa
@@ -173,7 +173,7 @@ export function IoTDashboard() {
           subtitle="Last 24 hours"
           icon={<AlertTriangle />}
           size="small"
-          glowColor={alerts.length > 0 ? '#EF4444' : 'var(--primary)'}
+          glowColor={alerts.length > 0 ? 'purple' : 'orange'}
         >
           <div className="text-3xl font-bold">
             {alerts.filter(a => a.deviceId === selectedDevice).length}

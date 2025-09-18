@@ -96,7 +96,7 @@ export default function DashboardPage() {
         {/* Sidebar */}
         <Sidebar
           activeDemo={activeDemo}
-          onDemoChange={setActiveDemo}
+          onDemoChange={(demo: string) => setActiveDemo(demo as keyof typeof demoConfigs)}
           collapsed={sidebarCollapsed}
           onCollapsedChange={setSidebarCollapsed}
           demos={demoConfigs}

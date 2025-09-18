@@ -111,7 +111,7 @@ export function TradingDashboard() {
           subtitle={selectedSymbol}
           icon={<DollarSign />}
           size="small"
-          glowColor="var(--primary)"
+          glowColor="orange"
         >
           <div className="text-3xl font-bold">
             ${currentData?.price?.toFixed(2) || '--'}
@@ -129,7 +129,7 @@ export function TradingDashboard() {
           subtitle="24h trading"
           icon={<BarChart3 />}
           size="small"
-          glowColor="var(--secondary)"
+          glowColor="blue"
         >
           <div className="text-3xl font-bold">
             {(currentData?.volume || 0) > 1000000 
@@ -147,7 +147,7 @@ export function TradingDashboard() {
           subtitle="Best bid"
           icon={<TrendingDown />}
           size="small"
-          glowColor="var(--accent)"
+          glowColor="green"
         >
           <div className="text-3xl font-bold text-green-400">
             ${currentData?.bid?.toFixed(2) || '--'}
@@ -162,7 +162,7 @@ export function TradingDashboard() {
           subtitle="Best ask"
           icon={<TrendingUp />}
           size="small"
-          glowColor="var(--accent)"
+          glowColor="purple"
         >
           <div className="text-3xl font-bold text-red-400">
             ${currentData?.ask?.toFixed(2) || '--'}
