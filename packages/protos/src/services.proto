@@ -1,0 +1,443 @@
+syntax = "proto3";
+
+package demo;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// ============================================
+// IoT Device Service - Server Streaming Demo
+// ============================================
+service IoTService {
+  // Server streaming - Real-time telemetry
+  rpc StreamDeviceTelemetry(DeviceStreamRequest) returns (stream TelemetryData);
+
+  // Server streaming - Device status updates
+  rpc StreamDeviceStatus(StatusStreamRequest) returns (stream DeviceStatus);
+
+  // Server streaming - Alert notifications
+  rpc StreamAlerts(AlertStreamRequest) returns (stream Alert);
+
+  // Unary calls
+  rpc GetDevice(GetDeviceRequest) returns (Device);
+  rpc ListDevices(google.protobuf.Empty) returns (DeviceList);
+  rpc ControlDevice(ControlRequest) returns (ControlResponse);
+  rpc GetDeviceHistory(HistoryRequest) returns (HistoryResponse);
+}
+
+// IoT Messages
+message Device {
+  string id = 1;
+  string name = 2;
+  DeviceType type = 3;
+  string location = 4;
+  string firmware_version = 5;
+  ConnectionStatus connection_status = 6;
+  map<string, string> metadata = 7;
+  google.protobuf.Timestamp last_seen = 8;
+}
+
+message TelemetryData {
+  string device_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  double temperature = 3;
+  double humidity = 4;
+  double pressure = 5;
+  double battery_level = 6;
+  int32 signal_strength = 7;
+  map<string, double> custom_metrics = 8;
+}
+
+message DeviceStatus {
+  string device_id = 1;
+  ConnectionStatus status = 2;
+  string message = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message Alert {
+  string id = 1;
+  string device_id = 2;
+  AlertSeverity severity = 3;
+  string title = 4;
+  string message = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+message DeviceStreamRequest {
+  repeated string device_ids = 1;
+  bool include_metrics = 2;
+}
+
+message StatusStreamRequest {
+  repeated string device_ids = 1;
+}
+
+message AlertStreamRequest {
+  repeated string device_ids = 1;
+  repeated AlertSeverity severities = 2;
+}
+
+message GetDeviceRequest {
+  string device_id = 1;
+}
+
+message DeviceList {
+  repeated Device devices = 1;
+}
+
+message ControlRequest {
+  string device_id = 1;
+  string command = 2;
+  map<string, string> parameters = 3;
+}
+
+message ControlResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Timestamp executed_at = 3;
+}
+
+message HistoryRequest {
+  string device_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}
+
+message HistoryResponse {
+  repeated TelemetryData data_points = 1;
+}
+
+enum DeviceType {
+  DEVICE_TYPE_UNSPECIFIED = 0;
+  SENSOR = 1;
+  ACTUATOR = 2;
+  GATEWAY = 3;
+  CAMERA = 4;
+}
+
+enum ConnectionStatus {
+  CONNECTION_STATUS_UNSPECIFIED = 0;
+  ONLINE = 1;
+  OFFLINE = 2;
+  CONNECTING = 3;
+}
+
+enum AlertSeverity {
+  ALERT_SEVERITY_UNSPECIFIED = 0;
+  INFO = 1;
+  WARNING = 2;
+  ERROR = 3;
+  CRITICAL = 4;
+}
+
+// ============================================
+// Trading Service - Server Streaming Demo
+// ============================================
+service TradingService {
+  // Server streaming - Market data
+  rpc StreamMarketData(MarketDataRequest) returns (stream MarketTick);
+
+  // Server streaming - Order book updates
+  rpc StreamOrderBook(OrderBookRequest) returns (stream OrderBookUpdate);
+
+  // Server streaming - Portfolio updates
+  rpc StreamPortfolio(PortfolioRequest) returns (stream PortfolioUpdate);
+
+  // Unary calls
+  rpc ExecuteTrade(TradeRequest) returns (TradeResponse);
+  rpc GetPortfolio(google.protobuf.Empty) returns (Portfolio);
+}
+
+// Trading Messages
+message MarketTick {
+  string symbol = 1;
+  double price = 2;
+  double volume = 3;
+  double change_24h = 4;
+  double high_24h = 5;
+  double low_24h = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+message MarketDataRequest {
+  repeated string symbols = 1;
+}
+
+message OrderBookUpdate {
+  string symbol = 1;
+  repeated Order bids = 2;
+  repeated Order asks = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message Order {
+  double price = 1;
+  double quantity = 2;
+}
+
+message OrderBookRequest {
+  string symbol = 1;
+  int32 depth = 2;
+}
+
+message Portfolio {
+  double total_value = 1;
+  double available_balance = 2;
+  repeated Position positions = 3;
+}
+
+message Position {
+  string symbol = 1;
+  double quantity = 2;
+  double average_price = 3;
+  double current_price = 4;
+  double pnl = 5;
+}
+
+message PortfolioRequest {
+  string account_id = 1;
+}
+
+message PortfolioUpdate {
+  Portfolio portfolio = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message TradeRequest {
+  string symbol = 1;
+  TradeType type = 2;
+  double quantity = 3;
+  double price = 4;
+}
+
+message TradeResponse {
+  string trade_id = 1;
+  bool success = 2;
+  string message = 3;
+  google.protobuf.Timestamp executed_at = 4;
+}
+
+enum TradeType {
+  TRADE_TYPE_UNSPECIFIED = 0;
+  BUY = 1;
+  SELL = 2;
+}
+
+// ============================================
+// Chat Service - Bidirectional Streaming Demo
+// ============================================
+service ChatService {
+  // Bidirectional streaming
+  rpc StreamChat(stream ChatMessage) returns (stream ChatMessage);
+
+  // Bidirectional streaming - Presence
+  rpc StreamPresence(stream PresenceUpdate) returns (stream PresenceUpdate);
+
+  // Unary calls
+  rpc GetChatHistory(HistoryChatRequest) returns (ChatHistory);
+  rpc CreateRoom(CreateRoomRequest) returns (Room);
+}
+
+// Chat Messages
+message ChatMessage {
+  string id = 1;
+  string user_id = 2;
+  string username = 3;
+  string room_id = 4;
+  string message = 5;
+  MessageType type = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  map<string, string> metadata = 8;
+}
+
+message PresenceUpdate {
+  string user_id = 1;
+  string username = 2;
+  PresenceStatus status = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message HistoryChatRequest {
+  string room_id = 1;
+  int32 limit = 2;
+  google.protobuf.Timestamp before = 3;
+}
+
+message ChatHistory {
+  repeated ChatMessage messages = 1;
+}
+
+message CreateRoomRequest {
+  string name = 1;
+  repeated string participant_ids = 2;
+}
+
+message Room {
+  string id = 1;
+  string name = 2;
+  repeated string participants = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  TEXT = 1;
+  JOIN = 2;
+  LEAVE = 3;
+  TYPING = 4;
+  FILE = 5;
+}
+
+enum PresenceStatus {
+  PRESENCE_STATUS_UNSPECIFIED = 0;
+  ONLINE = 1;
+  AWAY = 2;
+  BUSY = 3;
+  OFFLINE = 4;
+}
+
+// ============================================
+// File Service - Client/Server Streaming Demo
+// ============================================
+service FileService {
+  // Client streaming - Upload
+  rpc UploadFile(stream FileChunk) returns (UploadStatus);
+
+  // Server streaming - Download
+  rpc DownloadFile(DownloadRequest) returns (stream FileChunk);
+
+  // Unary calls
+  rpc ListFiles(ListFilesRequest) returns (FileList);
+  rpc DeleteFile(DeleteFileRequest) returns (DeleteResponse);
+  rpc GetFileMetadata(GetFileRequest) returns (FileInfo);
+}
+
+// File Messages
+message FileChunk {
+  string file_id = 1;
+  bytes content = 2;
+  int32 chunk_number = 3;
+  bool is_last_chunk = 4;
+  FileInfo metadata = 5; // Only sent with first chunk
+}
+
+message FileInfo {
+  string id = 1;
+  string name = 2;
+  int64 size = 3;
+  string mime_type = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp modified_at = 6;
+  string checksum = 7;
+}
+
+message UploadStatus {
+  bool success = 1;
+  string file_id = 2;
+  int64 bytes_received = 3;
+  string message = 4;
+}
+
+message DownloadRequest {
+  string file_id = 1;
+  int32 chunk_size = 2;
+}
+
+message ListFilesRequest {
+  string folder_path = 1;
+  int32 limit = 2;
+  string cursor = 3;
+}
+
+message FileList {
+  repeated FileInfo files = 1;
+  string next_cursor = 2;
+}
+
+message DeleteFileRequest {
+  string file_id = 1;
+}
+
+message DeleteResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetFileRequest {
+  string file_id = 1;
+}
+
+// ============================================
+// Analytics Service - Unary with Caching Demo
+// ============================================
+service AnalyticsService {
+  // Unary calls
+  rpc GetMetrics(MetricsRequest) returns (MetricsResponse);
+  rpc GetReport(ReportRequest) returns (Report);
+  rpc GetDashboard(DashboardRequest) returns (Dashboard);
+  rpc ExportData(ExportRequest) returns (ExportResponse);
+}
+
+// Analytics Messages
+message MetricsRequest {
+  repeated string metric_ids = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+  string aggregation = 4;
+}
+
+message MetricsResponse {
+  repeated Metric metrics = 1;
+  google.protobuf.Timestamp generated_at = 2;
+}
+
+message Metric {
+  string id = 1;
+  string name = 2;
+  double value = 3;
+  string unit = 4;
+  map<string, double> breakdown = 5;
+}
+
+message ReportRequest {
+  string report_type = 1;
+  map<string, string> parameters = 2;
+}
+
+message Report {
+  string id = 1;
+  string title = 2;
+  bytes content = 3;
+  string format = 4;
+  google.protobuf.Timestamp generated_at = 5;
+}
+
+message DashboardRequest {
+  string dashboard_id = 1;
+}
+
+message Dashboard {
+  string id = 1;
+  string name = 2;
+  repeated Widget widgets = 3;
+}
+
+message Widget {
+  string id = 1;
+  string type = 2;
+  string title = 3;
+  map<string, string> config = 4;
+  bytes data = 5;
+}
+
+message ExportRequest {
+  string format = 1;
+  MetricsRequest metrics = 2;
+}
+
+message ExportResponse {
+  string download_url = 1;
+  int64 file_size = 2;
+  google.protobuf.Timestamp expires_at = 3;
+}
