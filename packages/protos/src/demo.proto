@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package demo;
+
+// Greeter service demonstrates all 4 RPC patterns
+service GreeterService {
+  // Unary RPC
+  rpc SayHello (HelloRequest) returns (HelloReply);
+
+  // Server streaming RPC
+  rpc SayHelloStream (HelloRequest) returns (stream HelloReply);
+
+  // Client streaming RPC
+  rpc SayHelloClientStream (stream HelloRequest) returns (HelloSummary);
+
+  // Bidirectional streaming RPC
+  rpc SayHelloBidi (stream HelloRequest) returns (stream HelloReply);
+}
+
+// Data service for CRUD operations
+service DataService {
+  rpc GetUser (GetUserRequest) returns (User);
+  rpc ListUsers (ListUsersRequest) returns (stream User);
+  rpc CreateUser (CreateUserRequest) returns (User);
+  rpc UpdateUser (UpdateUserRequest) returns (User);
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+
+  // Bidirectional chat
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+// File upload service
+service FileService {
+  rpc UploadFile (stream FileChunk) returns (UploadStatus);
+  rpc DownloadFile (DownloadFileRequest) returns (stream FileChunk);
+}
+
+// Messages for Greeter service
+message HelloRequest {
+  string name = 1;
+  string language = 2;
+}
+
+message HelloReply {
+  string message = 1;
+  int64 timestamp = 2;
+  int32 sequence = 3;
+}
+
+message HelloSummary {
+  int32 total_messages = 1;
+  repeated string names = 2;
+  int64 start_time = 3;
+  int64 end_time = 4;
+}
+
+// Messages for Data service
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  int32 age = 4;
+  UserRole role = 5;
+  int64 created_at = 6;
+  int64 updated_at = 7;
+}
+
+enum UserRole {
+  USER_ROLE_UNSPECIFIED = 0;
+  USER_ROLE_ADMIN = 1;
+  USER_ROLE_USER = 2;
+  USER_ROLE_GUEST = 3;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message ListUsersRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+  string sort_by = 3;
+  bool ascending = 4;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  int32 age = 3;
+  UserRole role = 4;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  int32 age = 4;
+  UserRole role = 5;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ChatMessage {
+  string user_id = 1;
+  string username = 2;
+  string message = 3;
+  int64 timestamp = 4;
+  MessageType type = 5;
+}
+
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  MESSAGE_TYPE_TEXT = 1;
+  MESSAGE_TYPE_JOIN = 2;
+  MESSAGE_TYPE_LEAVE = 3;
+  MESSAGE_TYPE_TYPING = 4;
+}
+
+// Messages for File service
+message FileChunk {
+  bytes content = 1;
+  int32 sequence = 2;
+  bool is_last = 3;
+  FileMetadata metadata = 4;
+}
+
+message FileMetadata {
+  string filename = 1;
+  string mime_type = 2;
+  int64 size = 3;
+}
+
+message UploadStatus {
+  bool success = 1;
+  string file_id = 2;
+  int64 bytes_received = 3;
+  string message = 4;
+}
+
+message DownloadFileRequest {
+  string file_id = 1;
+}

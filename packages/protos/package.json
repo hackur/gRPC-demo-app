@@ -1,0 +1,26 @@
+{
+  "name": "@grpc-demo/protos",
+  "version": "1.0.0",
+  "description": "Protocol buffer definitions and generated code",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "generate": "npm run generate:js && npm run generate:ts",
+    "generate:js": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./dist --grpc_out=grpc_js:./dist -I ./src ./src/*.proto",
+    "generate:ts": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:./dist -I ./src ./src/*.proto",
+    "generate:web": "protoc -I=./src --js_out=import_style=commonjs:./dist/web --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./dist/web ./src/*.proto",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && npm run generate",
+    "watch": "nodemon --watch src --ext proto --exec npm run build"
+  },
+  "devDependencies": {
+    "grpc-tools": "^1.12.4",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "nodemon": "^3.1.4",
+    "protoc-gen-grpc-web": "^1.5.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}

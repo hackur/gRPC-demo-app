@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  grpc-server:
+    build:
+      context: ./services/demo-server
+      dockerfile: Dockerfile
+    container_name: grpc-demo-server
+    ports:
+      - "50051:50051"
+    environment:
+      - NODE_ENV=development
+      - GRPC_PORT=50051
+      - LOG_LEVEL=info
+    volumes:
+      - ./services/demo-server:/app
+      - ./packages/protos:/protos
+      - /app/node_modules
+    networks:
+      - grpc-network
+    command: npm run dev
+
+  envoy:
+    image: envoyproxy/envoy:v1.27-latest
+    container_name: grpc-envoy-proxy
+    ports:
+      - "8080:8080"
+      - "9901:9901"
+    volumes:
+      - ./docker/envoy.yaml:/etc/envoy/envoy.yaml:ro
+    networks:
+      - grpc-network
+    depends_on:
+      - grpc-server
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml -l info
+
+  next-app:
+    build:
+      context: ./client/next-app
+      dockerfile: Dockerfile.dev
+    container_name: grpc-next-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_GRPC_WEB_URL=http://localhost:8080
+    volumes:
+      - ./client/next-app:/app
+      - ./packages/protos:/protos
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - grpc-network
+    depends_on:
+      - envoy
+    command: npm run dev
+
+networks:
+  grpc-network:
+    driver: bridge
+
+volumes:
+  node_modules:
+  next_cache:

@@ -1,0 +1,42 @@
+{
+  "name": "grpc-demo-app",
+  "version": "1.0.0",
+  "description": "Comprehensive gRPC demo application with Next.js client",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "client/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev:all",
+    "dev:all": "docker-compose up",
+    "dev:server": "npm run dev -w services/demo-server",
+    "dev:client": "npm run dev -w client/next-app",
+    "build": "npm run build:protos && npm run build:all",
+    "build:all": "npm run build -ws",
+    "build:protos": "npm run build -w packages/protos",
+    "test": "npm run test -ws",
+    "test:unit": "npm run test:unit -ws",
+    "test:integration": "npm run test:integration -ws",
+    "test:e2e": "npm run test:e2e -w client/next-app",
+    "lint": "npm run lint -ws",
+    "typecheck": "npm run typecheck -ws",
+    "clean": "npm run clean -ws && rm -rf node_modules",
+    "setup": "npm install && npm run setup:all",
+    "setup:all": "npm run setup -ws"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.2",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

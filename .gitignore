@@ -1,0 +1,135 @@
+# Dependencies
+node_modules/
+*/node_modules/
+*/*/node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+*.tsbuildinfo
+.next/
+.nuxt/
+.cache/
+
+# Generated proto files
+packages/protos/dist/
+**/generated/
+*.pb.js
+*.pb.d.ts
+*_pb.js
+*_pb.d.ts
+*_grpc_web_pb.js
+*_grpc_web_pb.d.ts
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+*.env
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+cypress/screenshots/
+cypress/videos/
+*.lcov
+
+# Docker
+docker/data/
+*.pid
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+*.tmp
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Package manager
+.npm
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Production
+/build
+/production
+
+# Misc
+*.pem
+*.key
+*.cert
+*.crt
+.vercel
+.netlify
+
+# Debug
+debug/
+*.heap
+*.cpuprofile
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Editor directories and files
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Local development
+.local/
+local.*.json
+!local.example.json
