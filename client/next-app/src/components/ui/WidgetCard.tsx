@@ -1,21 +1,66 @@
+/**
+ * @fileoverview WidgetCard component for displaying dashboard widgets.
+ * A versatile card component with glass morphism effects, animations,
+ * and multiple size options for creating responsive dashboard layouts.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
+/**
+ * Props interface for the WidgetCard component.
+ *
+ * @interface WidgetCardProps
+ */
 interface WidgetCardProps {
+  /** Optional card title displayed in the header */
   title?: string;
+  /** Optional subtitle displayed below the title */
   subtitle?: string;
+  /** Optional icon element displayed in the header */
   icon?: ReactNode;
+  /** Child content to render inside the card */
   children: ReactNode;
+  /** Additional CSS classes to apply */
   className?: string;
+  /** Glow color effect on hover */
   glowColor?: 'orange' | 'blue' | 'green' | 'purple';
+  /** Card size affecting grid layout */
   size?: 'small' | 'medium' | 'large' | 'full';
+  /** Whether the card should respond to hover interactions */
   interactive?: boolean;
+  /** Whether to apply glass morphism effect */
   glass?: boolean;
 }
 
+/**
+ * A flexible widget card component with glass morphism effects and animations.
+ * Supports various sizes, glow effects, and interactive states for dashboard layouts.
+ *
+ * @component
+ * @param {WidgetCardProps} props - The component props
+ * @returns {JSX.Element} The rendered WidgetCard component
+ *
+ * @example
+ * ```typescript
+ * <WidgetCard
+ *   title="System Status"
+ *   subtitle="Real-time monitoring"
+ *   icon={<StatusIcon />}
+ *   size="medium"
+ *   glowColor="green"
+ *   interactive
+ * >
+ *   <StatusDisplay />
+ * </WidgetCard>
+ * ```
+ */
 export function WidgetCard({
   title,
   subtitle,
@@ -27,6 +72,7 @@ export function WidgetCard({
   interactive = false,
   glass = true,
 }: WidgetCardProps) {
+  /** CSS Grid classes for different card sizes */
   const sizeClasses = {
     small: 'col-span-1 row-span-1',
     medium: 'col-span-2 row-span-2',
@@ -34,6 +80,7 @@ export function WidgetCard({
     full: 'col-span-4 row-span-3',
   };
 
+  /** Shadow styles for different glow colors */
   const glowStyles = {
     orange: 'hover:shadow-[0_0_30px_rgba(255,107,53,0.3)]',
     blue: 'hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]',

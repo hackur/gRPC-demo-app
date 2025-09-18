@@ -8,6 +8,9 @@ import { WidgetCard } from '@/components/ui/WidgetCard';
 import { StreamIndicator } from '@/components/ui/StreamIndicator';
 import { MetricBadge } from '@/components/ui/MetricBadge';
 import { motion } from 'framer-motion';
+import { IoTDashboard } from '@/components/demos/IoTDashboard';
+import { TradingDashboard } from '@/components/demos/TradingDashboard';
+import { useConnectionStatus } from '@/store/appStore';
 
 // Demo configurations
 const demoConfigs = {
@@ -45,8 +48,9 @@ const demoConfigs = {
 
 export default function DashboardPage() {
   const [activeDemo, setActiveDemo] = useState<keyof typeof demoConfigs>('iot');
-  const [isStreaming, setIsStreaming] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const connectionStatus = useConnectionStatus();
+  const isStreaming = connectionStatus === 'connected';
 
   const currentDemo = demoConfigs[activeDemo];
 
@@ -90,8 +94,8 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* Widget Grid based on active demo */}
-            {activeDemo === 'iot' && <IoTDemoWidgets />}
-            {activeDemo === 'trading' && <TradingDemoWidgets />}
+            {activeDemo === 'iot' && <IoTDashboard />}
+            {activeDemo === 'trading' && <TradingDashboard />}
             {activeDemo === 'chat' && <ChatDemoWidgets />}
             {activeDemo === 'files' && <FilesDemoWidgets />}
             {activeDemo === 'analytics' && <AnalyticsDemoWidgets />}

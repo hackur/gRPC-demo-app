@@ -1,26 +1,62 @@
+/**
+ * @fileoverview Theme Context Provider for gRPC Demo Application
+ *
+ * This module provides a comprehensive theming system with:
+ * - 6 color themes (orange, blue, purple, green, red, teal)
+ * - 2 modes (dark, light) for a total of 12 theme combinations
+ * - Automatic CSS variable updates for real-time theme switching
+ * - localStorage persistence for user preferences
+ * - System preference detection for initial theme selection
+ *
+ * @author gRPC Demo App
+ * @version 1.0.0
+ */
+
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+/** Available theme color options */
 export type ThemeColor = 'orange' | 'blue' | 'purple' | 'green' | 'red' | 'teal';
+
+/** Available theme mode options */
 export type ThemeMode = 'dark' | 'light';
 
+/**
+ * Complete theme configuration interface
+ * @interface Theme
+ */
 interface Theme {
+  /** Human-readable theme name */
   name: string;
+  /** Theme color identifier */
   color: ThemeColor;
+  /** Theme mode (dark/light) */
   mode: ThemeMode;
+  /** Primary brand color (hex) */
   primary: string;
+  /** Secondary brand color (hex) */
   secondary: string;
+  /** Accent color for highlights (hex) */
   accent: string;
+  /** Background color (hex) */
   background: string;
+  /** Surface/card background color (hex) */
   surface: string;
+  /** Text color variations */
   text: {
+    /** Primary text color */
     primary: string;
+    /** Secondary text color */
     secondary: string;
+    /** Muted/disabled text color */
     muted: string;
   };
+  /** Glow effect configurations for glass-morphic design */
   glow: {
+    /** Primary glow effect CSS box-shadow value */
     primary: string;
+    /** Secondary glow effect CSS box-shadow value */
     secondary: string;
   };
 }

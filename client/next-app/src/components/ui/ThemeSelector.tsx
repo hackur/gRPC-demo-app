@@ -1,8 +1,29 @@
+/**
+ * @fileoverview Theme selector component for switching between color themes and dark/light modes.
+ * Provides an intuitive interface for users to customize the application's visual appearance.
+ *
+ * @author gRPC Demo App Team
+ * @version 1.0.0
+ */
+
 'use client';
 
 import { useTheme } from '@/contexts/ThemeContext';
 import { Palette, Moon, Sun } from 'lucide-react';
 
+/**
+ * Theme selector component that allows users to toggle between dark/light modes
+ * and select from available color themes.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered ThemeSelector component
+ *
+ * @example
+ * ```typescript
+ * // Basic usage in a header or settings panel
+ * <ThemeSelector />
+ * ```
+ */
 export function ThemeSelector() {
   const { themeColor, themeMode, setThemeColor, toggleMode, availableColors } = useTheme();
 
@@ -52,7 +73,21 @@ export function ThemeSelector() {
   );
 }
 
+/**
+ * Gets the hex color value for a given color name.
+ * Maps color names to their corresponding hex values for consistent theming.
+ *
+ * @param {string} color - The color name to get the hex value for
+ * @returns {string} The hex color value, defaults to orange if color not found
+ *
+ * @example
+ * ```typescript
+ * const blueHex = getColorValue('blue'); // Returns '#3B82F6'
+ * const unknownHex = getColorValue('unknown'); // Returns '#FF6B35' (default)
+ * ```
+ */
 function getColorValue(color: string): string {
+  /** Map of color names to their hex values */
   const colors: Record<string, string> = {
     orange: '#FF6B35',
     blue: '#3B82F6',

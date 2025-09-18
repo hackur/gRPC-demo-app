@@ -2,8 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { ThemeSelector } from '@/components/ui/ThemeSelector';
+import { useConnectionStatus } from '@/store/appStore';
 
 export function Header() {
+  const connectionStatus = useConnectionStatus();
+
   return (
     <motion.header
       className="fixed top-0 left-0 right-0 h-16 bg-[#0A0B0D] border-b border-gray-800 z-50"
@@ -34,8 +37,16 @@ export function Header() {
         <div className="flex items-center gap-4">
           {/* Connection Status */}
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm text-gray-400">Connected</span>
+            <div className={`w-2 h-2 rounded-full ${
+              connectionStatus === 'connected'
+                ? 'bg-green-500 animate-pulse'
+                : connectionStatus === 'connecting' || connectionStatus === 'reconnecting'
+                ? 'bg-yellow-500 animate-pulse'
+                : 'bg-red-500'
+            }`}></div>
+            <span className="text-sm text-gray-400 capitalize">
+              {connectionStatus}
+            </span>
           </div>
 
           {/* Theme Selector */}
