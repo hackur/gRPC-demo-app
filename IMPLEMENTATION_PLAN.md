@@ -1,7 +1,23 @@
-# gRPC Demo Application - 4 Milestone Implementation Plan
+# gRPC Demo Application - Implementation Plan
 
-## Project Overview
-A comprehensive gRPC implementation featuring a Node.js gRPC server with a Next.js web application client, demonstrating various gRPC patterns and best practices.
+> **⚠️ NOTICE**: This implementation plan has been superseded by the comprehensive [UNIFIED_PROJECT_PLAN.md](./UNIFIED_PROJECT_PLAN.md).
+>
+> **Please refer to the unified plan for**:
+> - Current project status (85% complete)
+> - Consolidated 10-point completion roadmap
+> - Clear milestones with checkboxes
+> - All organized todos by category
+> - Timeline estimates and next steps
+>
+> This file is maintained for historical reference and has been archived.
+
+---
+
+## Historical Implementation Plan
+
+**Original Overview**: A comprehensive gRPC implementation featuring a Node.js gRPC server with a Next.js web application client, demonstrating various gRPC patterns and best practices.
+
+**Status**: ✅ **LARGELY COMPLETED** - Most milestones achieved, see unified plan for remaining tasks.
 
 ## Architecture Overview
 ```
